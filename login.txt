@@ -1,0 +1,11 @@
+1. sales@test.com
+        123456
+
+2. supervisor@test.com
+        123456
+
+3. superuservisor@test.com
+        123456
+
+4. kasir@test.com
+        123456

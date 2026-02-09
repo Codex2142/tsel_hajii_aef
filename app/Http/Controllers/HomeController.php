@@ -9,12 +9,12 @@ use Carbon\Carbon;
 
 class HomeController extends Controller
 {
-        public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
     }
 
-        public function index()
+    public function index()
     {
         $transaksi = Transaksi::all();
         $totalInsentif = 0;
@@ -51,9 +51,6 @@ class HomeController extends Controller
             ];
         });
         $nominalTransaksi = $totalsPerDate->sum('totalPenjualan');
-
-
-
 
         return view('supvis.home', compact('totalInsentif', 'sisaBudget', 'kaliTransaksi', 'nominalTransaksi'));
     }

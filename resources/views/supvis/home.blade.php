@@ -2,7 +2,7 @@
     <main class="content">
         @if (Auth::user()->is_superuser)
             <li class="list-group-item">
-                <a href="a">Menu tambahan khusus Superuser</a>
+                <a href="a">Menu tambahan khusus Superuser (ini error / catatan akbar)</a>
             </li>
         @endif
 

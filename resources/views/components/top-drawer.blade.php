@@ -11,9 +11,13 @@
     </a>
 
                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile Photo" class="img-fluid" style="max-width: 25px; max-height: 25px; object-fit: cover;">
+                    @if (Auth::user()->photo)
+                        <img src="{{ asset('storage/' . Auth::user()->photo) }}" alt="Profile Photo" class="img-fluid" style="max-width: 25px; max-height: 25px; object-fit: cover;">
+                    @else
+                        <img src="https://placehold.co/25?text={{ strtoupper(substr(Auth::user()->name, 0, 1)) }}" alt="Profile Photo" class="img-fluid" style="max-width: 25px; max-height: 25px; object-fit: cover;">
+                    @endif
                     <span class="text-dark">{{ auth()->user()->name }}</span>
-    </a>
+                </a>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{ route('role_users.edit', auth()->user()->id) }}">
                         <i class="align-middle me-1" data-feather="user"></i> Profile
