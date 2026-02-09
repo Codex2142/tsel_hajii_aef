@@ -10,7 +10,6 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <style>
-
         .dataTables_wrapper .dataTables_paginate .page-item .page-link {
             background-color: #23a0b0 !important;
             color: white !important;
@@ -342,14 +341,16 @@
             let totalRows = document.querySelectorAll('#totalPenjualanBody tr');
             totalRows.forEach(row => {
                 let rowDate = row.getAttribute('data-tanggal');
-                row.style.display = (selectedDate === "all" || rowDate.startsWith(selectedDate)) ? "" : "none";
+                row.style.display = (selectedDate === "all" || rowDate.startsWith(selectedDate)) ? "" :
+                    "none";
             });
 
             // Filter "Detail Riwayat Pengambilan" table
             let detailRows = document.querySelectorAll('#detilHistoryTable tbody tr');
             detailRows.forEach(row => {
                 let rowDate = row.cells[0].textContent.trim();
-                row.style.display = (selectedDate === "all" || rowDate.startsWith(selectedDate)) ? "" : "none";
+                row.style.display = (selectedDate === "all" || rowDate.startsWith(selectedDate)) ? "" :
+                    "none";
             });
 
         });

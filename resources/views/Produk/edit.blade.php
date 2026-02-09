@@ -13,62 +13,40 @@
         @endif
 
         <x-form-card title="Update Produk">
-            <form action="{{ route('produk.update', $produk->id) }}"
-                method="POST"
-                onsubmit="removeFormatBeforeSubmit()">
+            <form action="{{ route('produk.update', $produk->id) }}" method="POST" onsubmit="removeFormatBeforeSubmit()">
                 @csrf
                 @method('PUT')
 
                 <div class="row g-3">
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Nama Produk"
-                            name="produk_nama"
-                            value="{{ old('produk_nama', $produk->produk_nama) }}"
-                            readonly
-                        />
+                        <x-form-group label="Nama Produk" name="produk_nama"
+                            value="{{ old('produk_nama', $produk->produk_nama) }}" readonly />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Harga Produk"
-                            name="produk_harga"
+                        <x-form-group label="Harga Produk" name="produk_harga"
                             value="{{ old('produk_harga', number_format($produk->produk_harga, 0, ',', '.')) }}"
-                            readonly
-                            onkeyup="formatRupiah(this)"
-                        />
+                            readonly onkeyup="formatRupiah(this)" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Diskon (Rp)"
-                            name="produk_diskon"
+                        <x-form-group label="Diskon (Rp)" name="produk_diskon"
                             value="{{ old('produk_diskon', number_format($produk->produk_diskon, 0, ',', '.')) }}"
-                            readonly
-                            onkeyup="formatRupiah(this)"
-                        />
+                            readonly onkeyup="formatRupiah(this)" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Insentif (Rp)"
-                            name="produk_insentif"
+                        <x-form-group label="Insentif (Rp)" name="produk_insentif"
                             value="{{ old('produk_insentif', number_format($produk->produk_insentif, 0, ',', '.')) }}"
-                            readonly
-                            onkeyup="formatRupiah(this)"
-                        />
+                            readonly onkeyup="formatRupiah(this)" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Jumlah Stok"
-                            name="produk_stok"
-                            type="number"
+                        <x-form-group label="Jumlah Stok" name="produk_stok" type="number"
                             placeholder="{{ old('stok_option') == 'tambah' ? 'Masukkan tambahan stok' : '' }}"
                             value="{{ old('stok_option') == 'tambah' ? '' : old('produk_stok', $produk->produk_stok) }}"
-                            required
-                        />
+                            required />
                         <small class="text-muted">
                             Masukkan jumlah stok yang ingin ditambahkan atau mengganti stok lama.
                         </small>
@@ -89,14 +67,8 @@
                     @endif
 
                     <div class="col-md-12">
-                        <x-form-group
-                            label="Detail Produk"
-                            name="produk_detail"
-                            type="textarea"
-                            rows="4"
-                            value="{{ old('produk_detail', $produk->produk_detail) }}"
-                            readonly
-                        />
+                        <x-form-group label="Detail Produk" name="produk_detail" type="textarea" rows="4"
+                            value="{{ old('produk_detail', $produk->produk_detail) }}" readonly />
                     </div>
 
                     <div class="col-md-12">
@@ -106,12 +78,9 @@
                             <div class="row g-2">
                                 @foreach ($merchandises as $merchandise)
                                     <div class="col-md-4 col-sm-6">
-                                        <input
-                                            type="checkbox"
-                                            class="btn-check"
+                                        <input type="checkbox" class="btn-check"
                                             id="merchandise_{{ $merchandise->id }}"
-                                            checked="{{ in_array($merchandise->id, old('merchandises', $produk->merchandises->pluck('id')->toArray())) }}"
-                                        >
+                                            checked="{{ in_array($merchandise->id, old('merchandises', $produk->merchandises->pluck('id')->toArray())) }}">
 
                                         <label class="btn btn-outline-secondary w-100"
                                             for="merchandise_{{ $merchandise->id }}">

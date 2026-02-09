@@ -18,57 +18,31 @@
 
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Nama Produk"
-                            name="produk_nama"
-                            placeholder="Masukkan nama produk"
-                            required="true"
-                        />
+                        <x-form-group label="Nama Produk" name="produk_nama" placeholder="Masukkan nama produk"
+                            required="true" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Harga Produk"
-                            name="produk_harga"
-                            placeholder="Masukkan harga produk"
-                            required="true"
-                        />
+                        <x-form-group label="Harga Produk" name="produk_harga" placeholder="Masukkan harga produk"
+                            required="true" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Diskon (Rp)"
-                            name="produk_diskon"
-                            placeholder="Masukkan diskon"
-                        />
+                        <x-form-group label="Diskon (Rp)" name="produk_diskon" placeholder="Masukkan diskon" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Stok Produk"
-                            name="produk_stok"
-                            type="number"
-                            placeholder="Masukkan stok produk"
-                            required="true"
-                        />
+                        <x-form-group label="Stok Produk" name="produk_stok" type="number"
+                            placeholder="Masukkan stok produk" required="true" />
                     </div>
 
                     <div class="col-md-12">
-                        <x-form-group
-                            label="Detail Produk"
-                            name="produk_detail"
-                            type="textarea"
-                            rows="4"
-                            placeholder="Masukkan detail produk"
-                        />
+                        <x-form-group label="Detail Produk" name="produk_detail" type="textarea" rows="4"
+                            placeholder="Masukkan detail produk" />
                     </div>
 
                     <div class="col-md-6">
-                        <x-form-group
-                            label="Insentif (Rp)"
-                            name="produk_insentif"
-                            placeholder="Masukkan insentif"
-                        />
+                        <x-form-group label="Insentif (Rp)" name="produk_insentif" placeholder="Masukkan insentif" />
                     </div>
 
                     <div class="col-md-12">
@@ -76,14 +50,9 @@
                         <div class="row g-2">
                             @foreach ($merchandises as $merchandise)
                                 <div class="col-md-4 col-sm-6">
-                                    <input
-                                        type="checkbox"
-                                        class="btn-check"
-                                        name="merchandises[]"
-                                        id="merchandise_{{ $merchandise->id }}"
-                                        value="{{ $merchandise->id }}"
-                                        {{ is_array(old('merchandises')) && in_array($merchandise->id, old('merchandises')) ? 'checked' : '' }}
-                                    >
+                                    <input type="checkbox" class="btn-check" name="merchandises[]"
+                                        id="merchandise_{{ $merchandise->id }}" value="{{ $merchandise->id }}"
+                                        {{ is_array(old('merchandises')) && in_array($merchandise->id, old('merchandises')) ? 'checked' : '' }}>
 
                                     <label class="btn btn-outline-primary w-100"
                                         for="merchandise_{{ $merchandise->id }}">
@@ -146,8 +115,8 @@
             if (insentifInput.value === '') insentifInput.value = 0;
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("simpanBtn").addEventListener("click", function () {
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("simpanBtn").addEventListener("click", function() {
                 let namaProduk = document.getElementById("produk_nama").value.trim();
                 let hargaProduk = document.getElementById("produk_harga").value.trim();
                 let stokProduk = document.getElementById("produk_stok").value.trim();
@@ -189,7 +158,7 @@
                 }
             });
 
-            document.getElementById("batalBtn").addEventListener("click", function () {
+            document.getElementById("batalBtn").addEventListener("click", function() {
                 Swal.fire({
                     title: "Batalkan Perubahan?",
                     text: "Perubahan yang belum disimpan akan hilang.",
