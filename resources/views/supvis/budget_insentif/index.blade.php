@@ -151,7 +151,7 @@
                 radio.addEventListener('change', updateUI);
             });
 
-            updateUI(); // init saat page load
+            updateUI();
         });
     </script>
 

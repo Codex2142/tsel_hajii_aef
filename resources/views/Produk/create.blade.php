@@ -1,7 +1,7 @@
 <x-Supvis.SupvisLayouts>
     <div class="container mt-5">
         <h2 class="text-center mb-4"><strong>Tambah Produk</strong></h2>
-        
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -15,64 +15,93 @@
         <x-form-card title="Tambah Produk">
             <form id="produkForm" action="{{ route('produk.store') }}" method="POST" onsubmit="removeFormatBeforeSubmit()">
                 @csrf
-                <x-form-group 
-                    label="Nama Produk" 
-                    name="produk_nama" 
-                    placeholder="Masukkan nama produk" 
-                    required="true" 
-                />
-                <x-form-group 
-                    label="Harga Produk" 
-                    name="produk_harga" 
-                    placeholder="Masukkan harga produk" 
-                    required="true" 
-                />
-                <x-form-group 
-                    label="Diskon (Rp)" 
-                    name="produk_diskon" 
-                    placeholder="Masukkan diskon" 
-                />
-                <x-form-group 
-                    label="Stok Produk" 
-                    name="produk_stok" 
-                    type="number" 
-                    placeholder="Masukkan stok produk" 
-                    required="true" 
-                />
-                <x-form-group 
-                    label="Detail Produk" 
-                    name="produk_detail" 
-                    type="textarea" 
-                    rows="4" 
-                    placeholder="Masukkan detail produk" 
-                />
-                <x-form-group 
-                    label="Insentif (Rp)" 
-                    name="produk_insentif" 
-                    placeholder="Masukkan insentif" 
-                />
 
-                
-                <div class="form-group mb-3">
-                    <label for="merchandises">Merchandise</label>
-                    <div>
-                        @foreach ($merchandises as $merchandise)
-                            <div class="form-check">
-                                <input type="checkbox" name="merchandises[]" id="merchandise_{{ $merchandise->id }}" value="{{ $merchandise->id }}" class="form-check-input" {{ is_array(old('merchandises')) && in_array($merchandise->id, old('merchandises')) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="merchandise_{{ $merchandise->id }}">
-                                    {{ $merchandise->merch_nama }}
-                                </label>
-                            </div>
-                        @endforeach
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Nama Produk"
+                            name="produk_nama"
+                            placeholder="Masukkan nama produk"
+                            required="true"
+                        />
+                    </div>
+
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Harga Produk"
+                            name="produk_harga"
+                            placeholder="Masukkan harga produk"
+                            required="true"
+                        />
+                    </div>
+
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Diskon (Rp)"
+                            name="produk_diskon"
+                            placeholder="Masukkan diskon"
+                        />
+                    </div>
+
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Stok Produk"
+                            name="produk_stok"
+                            type="number"
+                            placeholder="Masukkan stok produk"
+                            required="true"
+                        />
+                    </div>
+
+                    <div class="col-md-12">
+                        <x-form-group
+                            label="Detail Produk"
+                            name="produk_detail"
+                            type="textarea"
+                            rows="4"
+                            placeholder="Masukkan detail produk"
+                        />
+                    </div>
+
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Insentif (Rp)"
+                            name="produk_insentif"
+                            placeholder="Masukkan insentif"
+                        />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="fw-semibold mb-2">Merchandise</label>
+                        <div class="row g-2">
+                            @foreach ($merchandises as $merchandise)
+                                <div class="col-md-4 col-sm-6">
+                                    <input
+                                        type="checkbox"
+                                        class="btn-check"
+                                        name="merchandises[]"
+                                        id="merchandise_{{ $merchandise->id }}"
+                                        value="{{ $merchandise->id }}"
+                                        {{ is_array(old('merchandises')) && in_array($merchandise->id, old('merchandises')) ? 'checked' : '' }}
+                                    >
+
+                                    <label class="btn btn-outline-primary w-100"
+                                        for="merchandise_{{ $merchandise->id }}">
+                                        {{ $merchandise->merch_nama }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
 
-                <div class="text-center d-flex justify-content-center gap-3 mt-3">
-                    <x-form-button id="simpanBtn" type="button" variant="primary">Simpan</x-button>
-                    <x-form-button type="button" variant="danger" id="batalBtn">Batal</x-button>
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <x-form-button id="simpanBtn" type="button" variant="primary">Simpan</x-form-button>
+                    <x-form-button type="button" variant="danger" id="batalBtn">Batal</x-form-button>
                 </div>
             </form>
         </x-form-card>
+
     </div>
 
     <script>
@@ -116,7 +145,7 @@
             if (diskonInput.value === '') diskonInput.value = 0;
             if (insentifInput.value === '') insentifInput.value = 0;
         }
-       
+
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("simpanBtn").addEventListener("click", function () {
                 let namaProduk = document.getElementById("produk_nama").value.trim();
@@ -128,11 +157,11 @@
                 let merchandiseChecked = merchandise.length > 0;
 
                 if (
-                    namaProduk !== "" && 
-                    hargaProduk !== "" && 
-                    stokProduk !== "" && 
-                    detailProduk !== "" && 
-                    insentif !== "" && 
+                    namaProduk !== "" &&
+                    hargaProduk !== "" &&
+                    stokProduk !== "" &&
+                    detailProduk !== "" &&
+                    insentif !== "" &&
                     merchandiseChecked
                 ) {
                     Swal.fire({
@@ -146,8 +175,8 @@
                         cancelButtonText: "Batal"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            removeFormatBeforeSubmit(); 
-                            document.getElementById("produkForm").submit(); 
+                            removeFormatBeforeSubmit();
+                            document.getElementById("produkForm").submit();
                         }
                     });
                 } else {
@@ -172,7 +201,7 @@
                     cancelButtonText: "Kembali"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = "{{ route('produk.index') }}"; 
+                        window.location.href = "{{ route('produk.index') }}";
                     }
                 });
             });

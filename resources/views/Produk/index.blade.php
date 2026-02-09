@@ -42,7 +42,7 @@
 
     <div class="container mt-5">
         <h2 class="mb-4 text-center"><strong>Daftar Produk</strong></h2>
-        <a href="{{ route('produk.create') }}" class="btn btn-success mb-3" style = "background-color : #23a0b0">Tambah
+        <a href="{{ route('produk.create') }}" class="btn btn-success mb-3">Tambah
             Produk</a>
 
         @if ($produks->whereNull('deleted_at')->isEmpty())
@@ -51,136 +51,183 @@
         @else
             <div class="row">
                 @foreach ($produks->whereNull('deleted_at') as $produk)
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm border-0">
-                            <div class="card-body">
-                                <h5 class="card-title font-weight-bold" style="color: black;">{{ $produk->produk_nama }}
-                                </h5>
-                                <p class="card-text"><strong>Harga:</strong> Rp
-                                    {{ number_format($produk->produk_harga, 0, ',', '.') }}</p>
-                                <p class="card-text"><strong>Diskon:</strong> Rp
-                                    {{ number_format($produk->produk_diskon ?? 0, 0, ',', '.') }}</p>
-                                <p class="card-text"><strong>Insentif:</strong> Rp
-                                    {{ number_format($produk->produk_insentif, 0, ',', '.') }}</p>
-                                <p class="card-text"><strong>Harga Final:</strong> Rp
-                                    {{ number_format($produk->produk_harga_akhir, 0, ',', '.') }}</p>
-                                <p class="card-text"><strong>Stok:</strong> {{ $produk->produk_stok }}</p>
-                                <p class="card-text"><strong>Jumlah Terjual:</strong> <span
-                                        class="badge bg-primary">{{ $produk->produk_terjual }}</span></p>
-                                <div class="d-flex justify-content-between mt-3">
-                                    <a href="#" class="btn btn-info btn-sm btn-detail"
-                                        data-id="{{ $produk->id }}">🔍 Detail</a>
+                    <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm product-card">
 
+                            <div class="card-body d-flex flex-column">
 
+                                <!-- Header -->
+                                <div class="mb-3">
+                                    <h5 class="fw-semibold text-dark mb-1">
+                                        {{ $produk->produk_nama }}
+                                    </h5>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary">
+                                        Terjual {{ $produk->produk_terjual }}
+                                    </span>
+                                </div>
 
+                                <!-- Content -->
+                                <div class="small text-muted mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Harga</span>
+                                        <span class="fw-medium text-dark">
+                                            Rp {{ number_format($produk->produk_harga, 0, ',', '.') }}
+                                        </span>
+                                    </div>
 
-                                    <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-warning btn-sm">✏️
-                                        Stok</a>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Diskon</span>
+                                        <span class="text-danger">
+                                            Rp {{ number_format($produk->produk_diskon ?? 0, 0, ',', '.') }}
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <span>Insentif</span>
+                                        <span class="text-success">
+                                            Rp {{ number_format($produk->produk_insentif, 0, ',', '.') }}
+                                        </span>
+                                    </div>
+
+                                    <hr class="my-2">
+
+                                    <div class="d-flex justify-content-between fw-semibold text-dark">
+                                        <span>Harga Final</span>
+                                        <span>
+                                            Rp {{ number_format($produk->produk_harga_akhir, 0, ',', '.') }}
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mt-1">
+                                        <span>Stok</span>
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary">
+                                            {{ $produk->produk_stok }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Action -->
+                                <div class="mt-auto d-flex gap-2">
+                                    <button class="btn btn-outline-primary btn-sm flex-fill btn-detail"
+                                        data-id="{{ $produk->id }}">
+                                        Detail
+                                    </button>
+
+                                    <a href="{{ route('produk.edit', $produk->id) }}"
+                                        class="btn btn-outline-warning btn-sm flex-fill">
+                                        Edit Stok
+                                    </a>
+
                                     <form action="{{ route('produk.destroy', $produk->id) }}" method="POST"
-                                        class="d-inline delete-form">
+                                        class="delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">🗑️ Hapus</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            Hapus
+                                        </button>
                                     </form>
-
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function() {
-                                            document.querySelectorAll('.delete-form').forEach(form => {
-                                                form.addEventListener('submit', function(event) {
-                                                    event.preventDefault();
-
-                                                    Swal.fire({
-                                                        title: "Apakah Anda yakin?",
-                                                        text: "Produk ini akan dihapus secara permanen!",
-                                                        icon: "warning",
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: "#d33",
-                                                        cancelButtonColor: "#3085d6",
-                                                        confirmButtonText: "Ya, hapus!",
-                                                        cancelButtonText: "Batal"
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            form.submit();
-                                                        }
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    </script>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 @endforeach
+
             </div>
         @endif
 
 
         {{-- Display Deleted Products --}}
         @if (Auth::user() && Auth::user()->is_superuser)
-            <h2 class="mb-4 text-center"><strong>Produk Dihapus</strong></h2>
-
             @if ($produks->whereNotNull('deleted_at')->isEmpty())
-                <div class="alert alert-warning text-center">Belum ada produk yang terhapus.</div>
+                <div class="d-none"></div>
             @else
+                <h2 class="mb-4 text-center"><strong>Produk Dihapus</strong></h2>
                 <div class="row">
                     @foreach ($produks->whereNotNull('deleted_at') as $produk)
-                        <div class="col-md-4 mb-4">
-                            <div class="card shadow-sm border-0">
-                                <div class="card-body">
-                                    <h5 class="card-title font-weight-bold" style="color: black;">
-                                        {{ $produk->produk_nama }}
-                                    </h5>
-                                    <p class="card-text"><strong>Harga:</strong> Rp
-                                        {{ number_format($produk->produk_harga, 0, ',', '.') }}</p>
-                                    <p class="card-text"><strong>Diskon:</strong> Rp
-                                        {{ number_format($produk->produk_diskon ?? 0, 0, ',', '.') }}</p>
-                                    <p class="card-text"><strong>Insentif:</strong> Rp
-                                        {{ number_format($produk->produk_insentif, 0, ',', '.') }}</p>
-                                    <p class="card-text"><strong>Harga Final:</strong> Rp
-                                        {{ number_format($produk->produk_harga_akhir, 0, ',', '.') }}</p>
-                                    <p class="card-text"><strong>Stok:</strong> {{ $produk->produk_stok }}</p>
-                                    <p class="card-text"><strong>Jumlah Terjual:</strong> <span
-                                            class="badge bg-primary">{{ $produk->produk_terjual }}</span></p>
-                                    <p class="card-text"><strong>Tanggal Dihapus:</strong> <span
-                                            class="badge bg-primary">{{ $produk->deleted_at->format('d M Y H:i') }}</span>
-                                    </p>
-                                    <div class="d-flex justify-content-between mt-3">
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4">
+                            <div class="card h-100 border-0 shadow-sm product-card">
 
-                                        <form action="{{ route('produk.restore', $produk->id) }}" method="POST"
-                                            class="d-inline">
+                                <div class="card-body d-flex flex-column">
 
-                                            @csrf
-                                            <button type="submit" class="btn btn-success btn-sm">Restore</button>
+                                    <!-- Header -->
+                                    <div class="mb-3">
+                                        <h5 class="fw-semibold text-dark mb-1">
+                                            {{ $produk->produk_nama }}
+                                        </h5>
 
-                                        </form>
+                                        <div class="d-flex gap-2 flex-wrap">
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary">
+                                                Terjual {{ $produk->produk_terjual }}
+                                            </span>
 
-                                        <!-- Gk usah pake Hapus Permanen karena butuh ambil harga untuk Riwayat Transaksi - billy
-
-                                        <form action="{{ route('produk.force-delete', $produk->id) }}" method="POST" class="d-inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus permanen produk ini?');">
-
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Hapus Permanen</button>
-
-                                        </form> -->
-
+                                            <span class="badge bg-danger bg-opacity-10 text-danger">
+                                                Terhapus {{ $produk->deleted_at->format('d M Y H:i') }}
+                                            </span>
+                                        </div>
                                     </div>
+
+                                    <!-- Content -->
+                                    <div class="small text-muted mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Harga</span>
+                                            <span class="fw-medium text-dark">
+                                                Rp {{ number_format($produk->produk_harga, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <span>Diskon</span>
+                                            <span class="text-danger">
+                                                Rp {{ number_format($produk->produk_diskon ?? 0, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <span>Insentif</span>
+                                            <span class="text-success">
+                                                Rp {{ number_format($produk->produk_insentif, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+
+                                        <hr class="my-2">
+
+                                        <div class="d-flex justify-content-between fw-semibold text-dark">
+                                            <span>Harga Final</span>
+                                            <span>
+                                                Rp {{ number_format($produk->produk_harga_akhir, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mt-1">
+                                            <span>Stok</span>
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary">
+                                                {{ $produk->produk_stok }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action -->
+                                    <div class="mt-auto">
+                                        <form action="{{ route('produk.restore', $produk->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success btn-sm w-100">
+                                                Restore Produk
+                                            </button>
+                                        </form>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     @endforeach
+
                 </div>
             @endif
         @endif
 
     </div>
 
-    <!-- Tabel Riwayat Penjualan -->
-    <div class="container mt-4">
-        <h3 class="mt-5 text-center"><strong>📊 Riwayat Penjualan</strong></h3>
-    </div>
     @php
         $allHistory = collect();
         foreach ($produks as $produk) {
@@ -204,6 +251,11 @@
         $uniqueDates = $groupedHistory->keys();
     @endphp
 
+    <!-- Tabel Riwayat Penjualan -->
+    {{-- <div class="container mt-4">
+        <h2 class="mt-5 text-center"><strong>📊 Riwayat Penjualan</strong></h2>
+    </div>
+
     <!-- Filter Total Penjualan -->
     <div class ="container mt-4">
         <div class="mb-3">
@@ -215,6 +267,24 @@
                 @endforeach
             </select>
         </div>
+    </div> --}}
+    <div class="container mt-4">
+        <div class="max-w-7xl mx-auto px-4 mt-10">
+            <h2 class="text-2xl font-semibold text-center text-gray-800">
+                Riwayat Penjualan
+            </h2>
+
+            <div class="mt-1 max-w-md mx-auto">
+                <label for="filterTanggal" class="form-label"><strong>Filter Berdasarkan Tanggal:</strong></label>
+
+                <select id="filterTanggal" class="form-select">
+                    <option value="all">Semua Tanggal</option>
+                    @foreach ($uniqueDates as $date)
+                        <option value="{{ $date }}">{{ $date }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
     </div>
 
     <div class="container mt-4">
@@ -223,8 +293,8 @@
             <table class="table table-striped table-hover">
                 <thead style="background-color: #23a0b0; color: white;">
                     <tr class="text-center">
-                        <th style="width: 50%;">📅 Tanggal</th>
-                        <th style="width: 50%;">📦 Total Jumlah Terjual</th>
+                        <th style="width: 50%;">Tanggal</th>
+                        <th style="width: 50%;">Total Jumlah Terjual</th>
                     </tr>
                 </thead>
                 <tbody id="totalPenjualanBody">
@@ -239,26 +309,28 @@
         </div>
 
         <!-- Tabel Detail Riwayat  -->
-        <h4 class="mt-5 text-center"><strong>📋 Detail Riwayat </strong></h4>
-        <div class="table-responsive">
-            <table id="detilHistoryTable" class="table table-striped table-hover">
-                <thead style="background-color: #23a0b0; color: white;">
-                    <tr class="text-center">
-                        <th>📅 Tanggal & Waktu</th>
-                        <th>📦 Jumlah</th>
-                        <th>🛍️ Produk</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($allHistory as $entry)
+        <div class="container mt-4">
+            <h2 class="mt-5 text-center">Detail Riwayat</h2>
+            <div class="table-responsive">
+                <table id="detilHistoryTable" class="table table-striped table-hover">
+                    <thead style="background-color: #23a0b0; color: white;">
                         <tr class="text-center">
-                            <td>{{ $entry['tanggal'] }}</td>
-                            <td><span class="badge bg-primary">{{ $entry['jumlah'] ?? '-' }}</span></td>
-                            <td>{{ $entry['produk_nama'] ?? '-' }}</td>
+                            <th>Tanggal & Waktu</th>
+                            <th>Jumlah</th>
+                            <th>Produk</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($allHistory as $entry)
+                            <tr class="text-center">
+                                <td>{{ $entry['tanggal'] }}</td>
+                                <td><span class="badge bg-primary">{{ $entry['jumlah'] ?? '-' }}</span></td>
+                                <td>{{ $entry['produk_nama'] ?? '-' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

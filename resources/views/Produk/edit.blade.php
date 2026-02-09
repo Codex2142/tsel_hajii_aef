@@ -12,82 +12,133 @@
             </div>
         @endif
 
-        <form action="{{ route('produk.update', $produk->id) }}" onsubmit="removeFormatBeforeSubmit()" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="mb-3">
-                <label for="produk_nama" class="form-label">Nama Produk</label>
-                <input type="text" class="form-control bg-light text-secondary border" id="produk_nama" name="produk_nama"
-                    value="{{ old('produk_nama', $produk->produk_nama) }}" readonly>
-            </div>
+        <x-form-card title="Update Produk">
+            <form action="{{ route('produk.update', $produk->id) }}"
+                method="POST"
+                onsubmit="removeFormatBeforeSubmit()">
+                @csrf
+                @method('PUT')
 
-            <div class="mb-3">
-                <label for="produk_harga" class="form-label">Harga Produk</label>
-                <input type="text" class="form-control bg-light text-secondary border" id="produk_harga" name="produk_harga" required
-                    value="{{ old('produk_harga', number_format($produk->produk_harga, 0, ',', '.')) }}"
-                    onkeyup="formatRupiah(this)" readonly>
-            </div>
+                <div class="row g-3">
 
-            <div class="mb-3">
-                <label for="produk_diskon" class="form-label">Diskon (Rp)</label>
-                <input type="text" class="form-control bg-light text-secondary border" id="produk_diskon" name="produk_diskon"
-                    value="{{ old('produk_diskon', number_format($produk->produk_diskon, 0, ',', '.')) }}"
-                    onkeyup="formatRupiah(this)" readonly>
-            </div>
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Nama Produk"
+                            name="produk_nama"
+                            value="{{ old('produk_nama', $produk->produk_nama) }}"
+                            readonly
+                        />
+                    </div>
 
-            <div class="mb-3">
-                <label for="produk_insentif" class="form-label">Insentif (Rp)</label>
-                <input type="text" class="form-control bg-light text-secondary border" id="produk_insentif" name="produk_insentif"
-                    value="{{ old('produk_insentif', number_format($produk->produk_insentif, 0, ',', '.')) }}"
-                    onkeyup="formatRupiah(this)" readonly>
-            </div>
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Harga Produk"
+                            name="produk_harga"
+                            value="{{ old('produk_harga', number_format($produk->produk_harga, 0, ',', '.')) }}"
+                            readonly
+                            onkeyup="formatRupiah(this)"
+                        />
+                    </div>
 
-            <div class="mb-3">
-                <label for="produk_stok" class="form-label">Jumlah Stok</label>
-                <input type="number" class="form-control" id="produk_stok" name="produk_stok"
-                    value="{{ old('stok_option') == 'tambah' ? '' : old('produk_stok', $produk->produk_stok) }}"
-                    placeholder="{{ old('stok_option') == 'tambah' ? 'Masukkan tambahan stok yang ada' : '' }}"
-                    required>
-                <small class="text-muted">Masukkan jumlah stok yang ingin ditambahkan atau mengganti stok lama.</small>
-            </div>
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Diskon (Rp)"
+                            name="produk_diskon"
+                            value="{{ old('produk_diskon', number_format($produk->produk_diskon, 0, ',', '.')) }}"
+                            readonly
+                            onkeyup="formatRupiah(this)"
+                        />
+                    </div>
 
-            @if ($produk->produk_stok > 0)
-                <div class="mb-3">
-                    <label for="stok_option" class="form-label">Apa yang ingin Anda lakukan dengan stok lama?</label>
-                    <select class="form-control" id="stok_option" name="stok_option" required>
-                        <option value="ganti" {{ old('stok_option') == 'ganti' ? 'selected' : '' }}>Ganti Stok Lama
-                        </option>
-                        <option value="tambah" {{ old('stok_option') == 'tambah' ? 'selected' : '' }}>Tambah Stok Lama
-                        </option>
-                    </select>
-                </div>
-            @endif
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Insentif (Rp)"
+                            name="produk_insentif"
+                            value="{{ old('produk_insentif', number_format($produk->produk_insentif, 0, ',', '.')) }}"
+                            readonly
+                            onkeyup="formatRupiah(this)"
+                        />
+                    </div>
 
-            <div class="mb-3">
-                <label for="produk_detail" class="form-label">Detail Produk</label>
-                <textarea class="form-control bg-light text-secondary border" id="produk_detail" name="produk_detail" rows="4" readonly>{{ old('produk_detail', $produk->produk_detail) }}</textarea>
-            </div>
+                    <div class="col-md-6">
+                        <x-form-group
+                            label="Jumlah Stok"
+                            name="produk_stok"
+                            type="number"
+                            placeholder="{{ old('stok_option') == 'tambah' ? 'Masukkan tambahan stok' : '' }}"
+                            value="{{ old('stok_option') == 'tambah' ? '' : old('produk_stok', $produk->produk_stok) }}"
+                            required
+                        />
+                        <small class="text-muted">
+                            Masukkan jumlah stok yang ingin ditambahkan atau mengganti stok lama.
+                        </small>
+                    </div>
 
-            <div class="mb-3">
-                <label for="merchandises" class="form-label">Merchandise</label>
-                <div>
-                    <fieldset disabled="disabled">
-                    @foreach ($merchandises as $merchandise)
-                        <div class="form-check">
-                            <input type="checkbox" name="merchandises[]" id="merchandise_{{ $merchandise->id }}"
-                                value="{{ $merchandise->id }}" class="form-check-input"
-                                {{ is_array(old('merchandises', $produk->merchandises->pluck('id')->toArray())) && in_array($merchandise->id, old('merchandises', $produk->merchandises->pluck('id')->toArray())) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="merchandise_{{ $merchandise->id }}">
-                                {{ $merchandise->merch_nama }}
-                            </label>
+                    @if ($produk->produk_stok > 0)
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Opsi Stok</label>
+                            <select class="form-select" id="stok_option" name="stok_option" required>
+                                <option value="ganti" {{ old('stok_option') == 'ganti' ? 'selected' : '' }}>
+                                    Ganti Stok Lama
+                                </option>
+                                <option value="tambah" {{ old('stok_option') == 'tambah' ? 'selected' : '' }}>
+                                    Tambah Stok Lama
+                                </option>
+                            </select>
                         </div>
-                    @endforeach
-                    </fieldset>
-                </div>
-            </div>
+                    @endif
 
-            <button type="submit" class="btn btn-primary">Simpan</button>
-        </form>
+                    <div class="col-md-12">
+                        <x-form-group
+                            label="Detail Produk"
+                            name="produk_detail"
+                            type="textarea"
+                            rows="4"
+                            value="{{ old('produk_detail', $produk->produk_detail) }}"
+                            readonly
+                        />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="fw-semibold mb-2">Merchandise</label>
+
+                        <fieldset disabled>
+                            <div class="row g-2">
+                                @foreach ($merchandises as $merchandise)
+                                    <div class="col-md-4 col-sm-6">
+                                        <input
+                                            type="checkbox"
+                                            class="btn-check"
+                                            id="merchandise_{{ $merchandise->id }}"
+                                            checked="{{ in_array($merchandise->id, old('merchandises', $produk->merchandises->pluck('id')->toArray())) }}"
+                                        >
+
+                                        <label class="btn btn-outline-secondary w-100"
+                                            for="merchandise_{{ $merchandise->id }}">
+                                            {{ $merchandise->merch_nama }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </fieldset>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <x-form-button type="submit" variant="primary">
+                        Simpan Perubahan
+                    </x-form-button>
+
+                    <a href="/programhaji/produk">
+                        <x-form-button type="button" variant="danger" id="batalBtn">
+                            Batal
+                        </x-form-button>
+                    </a>
+                </div>
+            </form>
+        </x-form-card>
+
     </div>
     <script>
         function formatRupiah(angka) {
