@@ -1,53 +1,59 @@
 <x-Supvis.SupvisLayouts>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
     <style>
-
         . {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 14px;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-        #salesTable th,#submit-btn, #update-btn,#transaksiTable th,.sales-setor th.text-center {
+
+        #salesTable th,
+        #submit-btn,
+        #update-btn,
+        #transaksiTable th,
+        .sales-setor th.text-center {
             background-color: #23a0b0;
 
-}
-#submit-btn{
-background-color : #23a0b0;
-}
-/* Ubah warna tombol pagination */
-.dataTables_wrapper .dataTables_paginate .page-item .page-link {
-    background-color: #23a0b0 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 5px !important;
-    padding: 5px 10px !important;
-    margin: 2px !important;
-}
+        }
 
-/* Hover pada tombol pagination */
-.dataTables_wrapper .dataTables_paginate .page-item .page-link:hover {
-    background-color: #1b8190 !important;
-    color: white !important;
-}
+        #submit-btn {
+            background-color: #23a0b0;
+        }
 
-/* Warna tombol aktif */
-.dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
-    background-color: #23a0b0 !important;
-    color: white !important;
-    font-weight: bold !important;
-    box-shadow: none !important;
-}
+        /* Ubah warna tombol pagination */
+        .dataTables_wrapper .dataTables_paginate .page-item .page-link {
+            background-color: #23a0b0 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 5px !important;
+            padding: 5px 10px !important;
+            margin: 2px !important;
+        }
 
-/* Warna tombol disabled */
-.dataTables_wrapper .dataTables_paginate .page-item.disabled .page-link {
-    background-color: #b0b0b0 !important;
-    color: #ffffff !important;
-    opacity: 0.6;
-    cursor: not-allowed;
-}
+        /* Hover pada tombol pagination */
+        .dataTables_wrapper .dataTables_paginate .page-item .page-link:hover {
+            background-color: #1b8190 !important;
+            color: white !important;
+        }
+
+        /* Warna tombol aktif */
+        .dataTables_wrapper .dataTables_paginate .page-item.active .page-link {
+            background-color: #23a0b0 !important;
+            color: white !important;
+            font-weight: bold !important;
+            box-shadow: none !important;
+        }
+
+        /* Warna tombol disabled */
+        .dataTables_wrapper .dataTables_paginate .page-item.disabled .page-link {
+            background-color: #b0b0b0 !important;
+            color: #ffffff !important;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
 
         @media (max-width: 768px) {
@@ -129,128 +135,199 @@ background-color : #23a0b0;
 
     <body>
         <div class="container mt-5">
-            <h2>Sales Checklist</h2>
-            <div class="container mt-3">
-                <p>Pilih nama sales yang sudah setoran</p>
+            <h2 class="text-center mb-4">
+                <strong>Sales Checklist</strong>
+            </h2>
 
-                @if ($sales->isNotEmpty())
-                    <table id="salesTable" class="table">
-                        <thead>
-                            <tr>
-                                <th>Setoran Aktif</th>
-                                <th>Nama Sales</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($sales as $index => $salesperson)
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" id="sales{{ $salesperson->id }}"
-                                            value="{{ $salesperson->id }}" class="setoran-checkbox"
-                                            data-sales-id="{{ $salesperson->id }}"
-                                            {{ $salesperson->is_setoran == 1 ? 'checked' : '' }}>
-                                    </td>
-                                    <td>{{ $salesperson->name }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <button id="submit-btn" class="btn btn-primary mt-3">Aktifkan Sales</button>
-                @else
-                    <p>Tidak ada sales yang tersedia.</p>
-                @endif
-                <div id="result" style="display: none;">
-                    <h2>Checklist Result</h2>
-                    <p id="checked-names">Tidak ada sales yang dichecklist.</p>
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+                        <p class="text-muted mb-2 mb-md-0">
+                            Pilih sales yang sudah melakukan setoran hari ini
+                        </p>
+
+                        <button id="submit-btn" class="btn btn-primary btn-sm">
+                            Simpan Perubahan
+                        </button>
+                    </div>
+
+                    @if ($sales->isNotEmpty())
+
+                        <div class="table-responsive">
+                            <table id="salesTable" class="table align-middle table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width:60px" class="text-center">Aktif</th>
+                                        <th>Nama Sales</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach ($sales as $salesperson)
+                                        <tr>
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <input type="checkbox" class="form-check-input setoran-checkbox m-0"
+                                                        id="sales{{ $salesperson->id }}" value="{{ $salesperson->id }}"
+                                                        data-sales-id="{{ $salesperson->id }}"
+                                                        {{ $salesperson->is_setoran == 1 ? 'checked' : '' }}>
+                                                </div>
+                                            </td>
+                                            <td class="fw-medium">
+                                                {{ $salesperson->name }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="alert alert-warning text-center mb-0">
+                            Tidak ada sales yang tersedia.
+                        </div>
+
+                    @endif
+
                 </div>
             </div>
 
-            <h2 class="mt-5">Data History Setoran Sales</h2>
-            <div class="container mt-3">
-                <label for="salesSelect">Pilih Sales:</label>
-                <select id="salesSelect" class="form-control">
-                    <option value="">-- Pilih Sales --</option>
-                    @foreach ($transaksiBelumSetor as $salesName => $transaksiGroup)
-                        <option value="{{ \Illuminate\Support\Str::slug($salesName) }}">{{ $salesName }}</option>
-                    @endforeach
-                </select>
-                <form id="update-form" action="/update-setoran-status" method="POST">
-                    @csrf
+            <h2 class="text-center mb-4 mt-5">
+                <strong>Data History Setoran Sales</strong>
+            </h2>
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
 
-                    @forelse ($transaksiBelumSetor as $salesName => $transaksiGroup)
-                        <table class="table table-bordered mt-4 sales-table"
-                            data-sales="{{ \Illuminate\Support\Str::slug($salesName) }}">
-                            <thead>
-                                <!-- Nama Sales sebagai judul dengan colspan -->
-                                <tr class="sales-setor">
-                                    <th colspan="5" class="text-center">{{ $salesName }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Pilih</th>
-                                    <th>ID Transaksi</th>
-                                    <th>Tanggal Setoran</th>
-                                    <th>Total Harga</th>
-                                    <th>Total Insentif</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $subtotalHarga = 0;
-                                    $subtotalInsentif = 0;
-                                @endphp
-                                @foreach ($transaksiGroup as $transaksi)
-                                    @php
-                                        $history = is_string($transaksi->history_setoran)
-                                            ? json_decode($transaksi->history_setoran, true)
-                                            : $transaksi->history_setoran;
-                                    @endphp
-                                    @if (is_array($history))
-                                        @foreach ($history as $entry)
-                                            @php
-                                                $harga = isset($entry['total_harga'])
-                                                    ? (float) str_replace('.', '', $entry['total_harga'])
-                                                    : 0;
-                                                $insentif = isset($entry['total_insentif'])
-                                                    ? (float) str_replace('.', '', $entry['total_insentif'])
-                                                    : 0;
-
-                                                $subtotalHarga += $harga;
-                                                $subtotalInsentif += $insentif;
-                                            @endphp
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" name="setoran_data[]"
-                                                        value="{{ $transaksi->id_transaksi }}">
-                                                </td>
-                                                <td>{{ $transaksi->id_transaksi }}</td>
-                                                <td>{{ $entry['tanggal'] }}</td>
-                                                <td>{{ number_format($harga, 0, ',', '.') }}</td>
-                                                <td>{{ number_format($insentif, 0, ',', '.') }}</td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
+                    <!-- Filter Sales -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="salesSelect" class="form-label fw-medium">Pilih Sales</label>
+                            <select id="salesSelect" class="form-select">
+                                <option value="">-- Pilih Sales --</option>
+                                @foreach ($transaksiBelumSetor as $salesName => $transaksiGroup)
+                                    <option value="{{ \Illuminate\Support\Str::slug($salesName) }}">{{ $salesName }}
+                                    </option>
                                 @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr class="table-secondary">
-                                    <td colspan="3"><strong>Total</strong></td>
-                                    <td>{{ number_format($subtotalHarga, 0, ',', '.') }}</td>
-                                    <td>{{ number_format($subtotalInsentif, 0, ',', '.') }}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    @empty
-                        <p>Tidak ada data history setoran yang tersedia.</p>
-                    @endforelse
+                            </select>
+                        </div>
+                    </div>
 
-                    <button id="update-btn" type="submit" class="btn btn-primary mt-3">Perbarui Status Setoran</button>
-                </form>
+                    <form id="update-form" action="/update-setoran-status" method="POST">
+                        @csrf
+
+                        @forelse ($transaksiBelumSetor as $salesName => $transaksiGroup)
+
+                            <div class="card mb-4 border">
+                                <div class="card-header bg-light fw-semibold text-center">
+                                    {{ $salesName }}
+                                </div>
+
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered mb-0 sales-table"
+                                            data-sales="{{ \Illuminate\Support\Str::slug($salesName) }}">
+
+                                            <thead class="table-light text-center">
+                                                <tr>
+                                                    <th width="60">Pilih</th>
+                                                    <th>ID Transaksi</th>
+                                                    <th>Tanggal Setoran</th>
+                                                    <th>Total Harga</th>
+                                                    <th>Total Insentif</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @php
+                                                    $subtotalHarga = 0;
+                                                    $subtotalInsentif = 0;
+                                                @endphp
+
+                                                @foreach ($transaksiGroup as $transaksi)
+                                                    @php
+                                                        $history = is_string($transaksi->history_setoran)
+                                                            ? json_decode($transaksi->history_setoran, true)
+                                                            : $transaksi->history_setoran;
+                                                    @endphp
+
+                                                    @if (is_array($history))
+                                                        @foreach ($history as $entry)
+                                                            @php
+                                                                $harga = isset($entry['total_harga'])
+                                                                    ? (float) str_replace(
+                                                                        '.',
+                                                                        '',
+                                                                        $entry['total_harga'],
+                                                                    )
+                                                                    : 0;
+                                                                $insentif = isset($entry['total_insentif'])
+                                                                    ? (float) str_replace(
+                                                                        '.',
+                                                                        '',
+                                                                        $entry['total_insentif'],
+                                                                    )
+                                                                    : 0;
+
+                                                                $subtotalHarga += $harga;
+                                                                $subtotalInsentif += $insentif;
+                                                            @endphp
+
+                                                            <tr>
+                                                                <td class="text-center align-middle">
+                                                                    <input type="checkbox" class="form-check-input m-0"
+                                                                        name="setoran_data[]"
+                                                                        value="{{ $transaksi->id_transaksi }}">
+                                                                </td>
+                                                                <td class="align-middle">{{ $transaksi->id_transaksi }}
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    {{ $entry['tanggal'] }}</td>
+                                                                <td class="align-middle text-end">
+                                                                    {{ number_format($harga, 0, ',', '.') }}
+                                                                </td>
+                                                                <td class="align-middle text-end">
+                                                                    {{ number_format($insentif, 0, ',', '.') }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+
+                                            <tfoot>
+                                                <tr class="table-secondary fw-semibold">
+                                                    <td colspan="3" class="text-center">Total</td>
+                                                    <td class="text-end">
+                                                        {{ number_format($subtotalHarga, 0, ',', '.') }}</td>
+                                                    <td class="text-end">
+                                                        {{ number_format($subtotalInsentif, 0, ',', '.') }}</td>
+                                                </tr>
+                                            </tfoot>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @empty
+                            <div class="alert alert-info text-center">
+                                Tidak ada data history setoran yang tersedia.
+                            </div>
+                        @endforelse
+
+                        <div class="d-flex justify-content-end mt-3">
+                            <button id="update-btn" type="submit" class="btn btn-primary px-4">
+                                Perbarui Status Setoran
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
 
-
-
-            <h2 class="mt-5">Data Transaksi yang Sudah Disetor Sales</h2>
-            <div class="container mt-3">
+            {{-- <div class="container mt-3">
                 <table id="transaksiTable" class="table table-bordered display">
                     <thead>
                         <tr>
@@ -291,6 +368,72 @@ background-color : #23a0b0;
                         @endforelse
                     </tbody>
                 </table>
+            </div> --}}
+
+            <div class="container-fluid mt-4">
+                <h2 class="mt-5">Data Transaksi yang Sudah Disetor Sales</h2>
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table id="transaksiTable" class="table table-hover table-bordered align-middle w-100">
+                                <thead class="table-light text-center">
+                                    <tr>
+                                        <th width="60">Status</th>
+                                        <th>ID Transaksi</th>
+                                        <th>Nama Sales</th>
+                                        <th>Tanggal Setoran</th>
+                                        <th>Total Harga</th>
+                                        <th>Total Insentif</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @forelse ($transaksiSudahSetor as $transaksi)
+                                        @php
+                                            $history = json_decode($transaksi->history_setoran, true);
+                                        @endphp
+
+                                        @if (is_array($history))
+                                            @foreach ($history as $entry)
+                                                @php
+                                                    $harga = $transaksi->produk->produk_harga_akhir ?? 0;
+                                                    $insentif = $transaksi->produk->produk_insentif ?? 0;
+                                                @endphp
+
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <span class="badge bg-success">
+                                                            <i class="bi bi-check-circle"></i> Setor
+                                                        </span>
+                                                    </td>
+                                                    <td>{{ $transaksi->id_transaksi }}</td>
+                                                    <td class="fw-medium">{{ $entry['nama_sales'] }}</td>
+                                                    <td class="text-center">{{ $entry['tanggal'] }}</td>
+                                                    <td class="text-end">
+                                                        Rp {{ number_format($harga, 0, ',', '.') }}
+                                                    </td>
+                                                    <td class="text-end">
+                                                        Rp {{ number_format($insentif, 0, ',', '.') }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted py-4">
+                                                Tidak ada transaksi yang sudah disetor.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -457,6 +600,6 @@ background-color : #23a0b0;
                 });
             </script>
 
-            
+
     </body>
 </x-Supvis.SupvisLayouts>
