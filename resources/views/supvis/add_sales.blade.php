@@ -1,365 +1,416 @@
 <x-Supvis.SupvisLayouts>
-<head>
-    
-    <style>
-        .profile-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
 
-        .avatar-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-        }
+    <head>
 
-        .avatar-preview {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid #2575FC;
-            overflow: hidden;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .avatar-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .avatar-preview i {
-            font-size: 80px;
-            color: #ccc;
-        }
-
-        .photo-upload-label {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: #2575FC;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .photo-upload-label:hover {
-            background: #1e66d9;
-        }
-
-        .photo-upload-label i {
-            color: white;
-            font-size: 18px;
-        }
-
-        #photo {
-            display: none;
-        }
-
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .btn-save {
-            flex: 1;
-            background: #23a0b0;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            color: white;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .btn-save:hover {
-            background: #1c828f;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            background: #ff4d4d;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            color: white;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .btn-cancel:hover {
-            background: #d43f3f;
-        }
-
-
-        .error {
-            color: #ff4d4d;
-            font-size: 14px;
-            margin-top: 6px;
-            margin-bottom: 10px;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
+        <style>
+            .profile-section {
+                text-align: center;
+                margin-bottom: 30px;
             }
 
-            100% {
-                opacity: 1;
+            .avatar-container {
+                position: relative;
+                width: 150px;
+                height: 150px;
+                margin: 0 auto 20px;
             }
-        }
-    </style>
-</head>
 
-<body>
-    <div class="container">
-        <h1 class="text-center mb-5 mt-5"><strong>Tambah Sales</strong></h1>
-        <x-form-card>
-        <form id="addSalesForm" action="{{ route('sales.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="profile-section">
-                <div class="avatar-container">
-                    <div class="avatar-preview">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <label for="photo" class="photo-upload-label">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                    <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(this)">
-                </div>
-            </div>
-            <x-form-group 
-                label="Nama Sales" 
-                name="name" 
-                placeholder="Masukkan nama sales" 
-                required="true"
-                oninput="validateName(this)"
-                maxlength="20"
-            />
-            <div class="error" id="nameError"></div>
-
-            <x-form-group 
-                label="Email" 
-                name="email" 
-                type="email" 
-                placeholder="Masukkan email" 
-                required="true"
-            />
-            <div class="error" id="emailError"></div>
-
-            <x-form-group 
-                label="Telepon" 
-                name="phone" 
-                type="tel" 
-                placeholder="Masukkan nomor telepon" 
-                pattern="[0-9]*" 
-                maxlength="15" 
-                oninput="validatePhone(this)"
-                required="true"
-            />
-            <div class="error" id="phoneError"></div>
-
-            <x-form-group 
-                label="PIN" 
-                name="pin" 
-                type="text" 
-                placeholder="Masukkan PIN (4-6 digit)" 
-                maxlength="6" 
-                minlength="4" 
-                oninput="validatePin(this)"
-                required="true"
-            />
-            <div class="error" id="pinError"></div>
-            
-            <div class="form-group">
-                <label for="role">Role:</label>
-                <select id="role" name="role">
-                    <option value="">Pilih Role</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Supervisor" disabled>Supervisor</option>
-                </select>
-                <div class="error" id="roleError"></div>
-            </div>
-            <div class="btn-container">
-                <button type="submit" class="btn btn-save" onclick="showAlert(event)">Tambah Sales</button>
-                <button type="button" class="btn btn-cancel" onclick="confirmCancel()">Batal</button>
-            </div>
-        </form>
-        </x-form-card>
-    </div>
-
-    <script>
-        function previewImage(input) {
-            const preview = document.querySelector('.avatar-preview');
-            const file = input.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
-                }
-                reader.readAsDataURL(file);
-            } else {
-                preview.innerHTML = '<i class="fas fa-user"></i>';
+            .avatar-preview {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                border: 3px solid #2575FC;
+                overflow: hidden;
+                background: #f0f0f0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
-        }
 
-        // Form validation helper functions
-        const ValidationRules = {
-            name: {
-                validate: (value) => {
-                    if (!value) return 'Nama sales wajib diisi';
-                    if (value.length > 20) return 'Nama tidak boleh lebih dari 20 karakter';
-                    if (!/^[a-zA-Z\s]*$/.test(value)) return 'Nama hanya boleh mengandung huruf dan spasi';
-                    return null;
+            .avatar-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .avatar-preview i {
+                font-size: 80px;
+                color: #ccc;
+            }
+
+            .photo-upload-label {
+                position: absolute;
+                bottom: 5px;
+                right: 5px;
+                background: #2575FC;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .photo-upload-label:hover {
+                background: #1e66d9;
+            }
+
+            .photo-upload-label i {
+                color: white;
+                font-size: 18px;
+            }
+
+            #photo {
+                display: none;
+            }
+
+            .btn-container {
+                display: flex;
+                justify-content: space-between;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .btn-save {
+                flex: 1;
+                background: #23a0b0;
+                padding: 12px;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                color: white;
+                transition: all 0.3s ease;
+                text-align: center;
+            }
+
+            .btn-save:hover {
+                background: #1c828f;
+            }
+
+            .btn-cancel {
+                flex: 1;
+                background: #ff4d4d;
+                padding: 12px;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                color: white;
+                transition: all 0.3s ease;
+                text-align: center;
+            }
+
+            .btn-cancel:hover {
+                background: #d43f3f;
+            }
+
+
+            .error {
+                color: #ff4d4d;
+                font-size: 14px;
+                margin-top: 6px;
+                margin-bottom: 10px;
+            }
+
+            @keyframes fadeIn {
+                0% {
+                    opacity: 0;
                 }
-            },
 
-            email: {
-                validate: (value) => {
-                    if (!value) return 'Email wajib diisi';
-                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Format email tidak valid';
-                    return null;
+                100% {
+                    opacity: 1;
                 }
-            },
+            }
+        </style>
+    </head>
 
-            photo: {
-                validate: (file) => {
-                    if (!file) return null;
-                    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                    const maxSize = 2048 * 1024;
+    <body>
+        <div class="container mt-5">
+            <h1 class="text-center mb-5"><strong>Tambah Sales</strong></h1>
 
-                    if (!validTypes.includes(file.type)) {
-                        return 'File harus berformat JPEG, PNG, atau JPG';
+            <div class="row justify-content-center">
+                <x-form-card>
+
+                    <form id="addSalesForm" action="{{ route('sales.store') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+
+                        <!-- Avatar -->
+                        <div class="d-flex justify-content-center mb-4">
+                            <div class="avatar-container">
+                                <div class="avatar-preview" id="avatarPreview">
+                                    <i class="fas fa-user"></i>
+                                </div>
+
+                                <label for="photo" class="photo-upload-label">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+
+                                <input type="file" id="photo" name="photo" accept="image/*"
+                                    onchange="previewImage(this)" hidden>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <x-form-group label="Nama Sales" name="name" placeholder="Masukkan nama sales"
+                                    required="true" maxlength="20" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <x-form-group label="Email" name="email" type="email" placeholder="Masukkan email"
+                                    required="true" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <x-form-group label="Telepon" name="phone" placeholder="Masukkan nomor telepon"
+                                    maxlength="15" required="true" oninput="handlePhoneInput(this)" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <x-form-group label="PIN" name="pin" placeholder="Masukkan PIN (4–6 digit)"
+                                    maxlength="6" minlength="4" required="true" oninput="handlePinInput(this)" />
+                            </div>
+
+                            <!-- Role Button Style -->
+                            <div class="col-12">
+                                <label class="fw-semibold mb-2 d-block">Role</label>
+
+                                <div class="d-flex gap-3 role-radio">
+                                    <input type="radio" class="btn-check" name="role" id="role_sales"
+                                        value="Sales" checked>
+                                    <label class="btn btn-outline-primary w-100" for="role_sales">
+                                        Sales
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="role" id="role_supervisor"
+                                        value="Supervisor">
+                                    <label class="btn btn-outline-warning w-100" for="role_supervisor">
+                                        Supervisor
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary px-4">
+                                Simpan
+                            </button>
+                            <button type="button" class="btn btn-outline-danger px-4" onclick="confirmCancel()">
+                                Batal
+                            </button>
+                        </div>
+
+                    </form>
+
+                </x-form-card>
+            </div>
+        </div>
+
+
+        <script>
+            function handlePhoneInput(input) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+
+            function handlePinInput(input) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+
+                if (input.value.length > 6) {
+                    input.value = input.value.slice(0, 6);
+                }
+            }
+
+            function previewImage(input) {
+                const preview = document.getElementById('avatarPreview');
+
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        preview.innerHTML =
+                            `<img src="${e.target.result}" class="rounded-circle" style="width:100%;height:100%;object-fit:cover;">`;
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function confirmCancel() {
+                Swal.fire({
+                    title: 'Batalkan input?',
+                    text: 'Data yang sudah diisi akan hilang.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, batal',
+                    cancelButtonText: 'Lanjutkan'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.history.back();
                     }
-                    if (file.size > maxSize) {
-                        return 'Ukuran file tidak boleh lebih dari 2MB';
+                });
+            }
+
+            function previewImage(input) {
+                const preview = document.querySelector('.avatar-preview');
+                const file = input.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
                     }
-                    return null;
-                }
-            },
-
-            pin: {
-                validate: (value) => {
-                    if (!value) return 'PIN wajib diisi';
-                    if (!/^\d+$/.test(value)) return 'PIN hanya boleh berisi angka';
-                    if (value.length < 4 || value.length > 6) return 'PIN harus terdiri dari 4-6 digit';
-                    return null;
-                }
-            },
-
-            phone: {
-                validate: (value) => {
-                    if (!value) return 'Nomor telepon wajib diisi';
-                    if (!/^\d+$/.test(value)) return 'Nomor telepon hanya boleh berisi angka';
-                    if (value.length > 15) return 'Nomor telepon tidak boleh lebih dari 15 digit';
-                    return null;
-                }
-            },
-
-            role: {
-                validate: (value) => {
-                    if (!value) return 'Role wajib dipilih';
-                    const validRoles = ['Sales', 'Supervisor'];
-                    if (!validRoles.includes(value)) return 'Role tidak valid';
-                    return null;
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.innerHTML = '<i class="fas fa-user"></i>';
                 }
             }
-        };
 
-        function validateField(fieldName, value) {
-            const error = ValidationRules[fieldName].validate(value);
-            const errorElement = document.getElementById(`${fieldName}Error`);
-            const inputElement = document.getElementById(fieldName);
+            // Form validation helper functions
+            const ValidationRules = {
+                name: {
+                    validate: (value) => {
+                        if (!value) return 'Nama sales wajib diisi';
+                        if (value.length > 20) return 'Nama tidak boleh lebih dari 20 karakter';
+                        if (!/^[a-zA-Z\s]*$/.test(value)) return 'Nama hanya boleh mengandung huruf dan spasi';
+                        return null;
+                    }
+                },
 
-            if (error) {
-                errorElement.textContent = error;
-                inputElement.classList.add('invalid');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                inputElement.classList.remove('invalid');
-                return true;
+                email: {
+                    validate: (value) => {
+                        if (!value) return 'Email wajib diisi';
+                        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Format email tidak valid';
+                        return null;
+                    }
+                },
+
+                photo: {
+                    validate: (file) => {
+                        if (!file) return null;
+                        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                        const maxSize = 2048 * 1024;
+
+                        if (!validTypes.includes(file.type)) {
+                            return 'File harus berformat JPEG, PNG, atau JPG';
+                        }
+                        if (file.size > maxSize) {
+                            return 'Ukuran file tidak boleh lebih dari 2MB';
+                        }
+                        return null;
+                    }
+                },
+
+                pin: {
+                    validate: (value) => {
+                        if (!value) return 'PIN wajib diisi';
+                        if (!/^\d+$/.test(value)) return 'PIN hanya boleh berisi angka';
+                        if (value.length < 4 || value.length > 6) return 'PIN harus terdiri dari 4-6 digit';
+                        return null;
+                    }
+                },
+
+                phone: {
+                    validate: (value) => {
+                        if (!value) return 'Nomor telepon wajib diisi';
+                        if (!/^\d+$/.test(value)) return 'Nomor telepon hanya boleh berisi angka';
+                        if (value.length > 15) return 'Nomor telepon tidak boleh lebih dari 15 digit';
+                        return null;
+                    }
+                },
+
+                role: {
+                    validate: (value) => {
+                        if (!value) return 'Role wajib dipilih';
+                        const validRoles = ['Sales', 'Supervisor'];
+                        if (!validRoles.includes(value)) return 'Role tidak valid';
+                        return null;
+                    }
+                }
+            };
+
+            function validateField(fieldName, value) {
+                const error = ValidationRules[fieldName].validate(value);
+                const errorElement = document.getElementById(`${fieldName}Error`);
+                const inputElement = document.getElementById(fieldName);
+
+                if (error) {
+                    errorElement.textContent = error;
+                    inputElement.classList.add('invalid');
+                    return false;
+                } else {
+                    errorElement.textContent = '';
+                    inputElement.classList.remove('invalid');
+                    return true;
+                }
             }
-        }
 
-        function handleSubmit(event) {
-            event.preventDefault();
+            function handleSubmit(event) {
+                event.preventDefault();
 
-            const form = document.getElementById('addSalesForm');
-            const formData = new FormData(form);
-            let isValid = true;
+                const form = document.getElementById('addSalesForm');
+                const formData = new FormData(form);
+                let isValid = true;
 
-            for (const [fieldName, value] of formData.entries()) {
-                if (fieldName === 'photo') {
-                    const file = document.getElementById('photo').files[0];
-                    if (file && !validateField('photo', file)) {
+                for (const [fieldName, value] of formData.entries()) {
+                    if (fieldName === 'photo') {
+                        const file = document.getElementById('photo').files[0];
+                        if (file && !validateField('photo', file)) {
+                            isValid = false;
+                        }
+                    } else if (!validateField(fieldName, value)) {
                         isValid = false;
                     }
-                } else if (!validateField(fieldName, value)) {
-                    isValid = false;
                 }
-            }
 
-            if (!isValid) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validasi Gagal',
-                });
-                return;
-            }
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-
-            .then(response => response.json())
-            .then(data => {
-                if (data.errors) {
-                    const errorMessages = Object.values(data.errors).flat();
+                if (!isValid) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Validasi Gagal',
-                        text: errorMessages[0]
                     });
-                } else {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Sukses!',
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    return;
                 }
-            })
 
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                });
-            });
-        }
+                fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
 
-                    function confirmAdd(event) {
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.errors) {
+                            const errorMessages = Object.values(data.errors).flat();
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Validasi Gagal',
+                                text: errorMessages[0]
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Sukses!',
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        }
+                    })
+
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                        });
+                    });
+            }
+
+            function confirmAdd(event) {
                 event.preventDefault();
 
                 let namaSales = document.querySelector('input[name="name"]').value.trim();
@@ -391,7 +442,7 @@
                 }
             }
 
-            document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
                 document.querySelector(".btn-save").addEventListener("click", confirmAdd);
             });
 
@@ -412,30 +463,30 @@
             }
 
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('addSalesForm');
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.getElementById('addSalesForm');
 
-            form.querySelectorAll('input, select').forEach(input => {
-                input.addEventListener('input', (e) => {
-                    if (e.target.id === 'photo') {
-                        validateField('photo', e.target.files[0]);
-                    } else {
-                        validateField(e.target.id, e.target.value);
-                    }
+                form.querySelectorAll('input, select').forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        if (e.target.id === 'photo') {
+                            validateField('photo', e.target.files[0]);
+                        } else {
+                            validateField(e.target.id, e.target.value);
+                        }
+                    });
+
+                    input.addEventListener('blur', (e) => {
+                        if (e.target.id === 'photo') {
+                            validateField('photo', e.target.files[0]);
+                        } else {
+                            validateField(e.target.id, e.target.value);
+                        }
+                    });
                 });
 
-                input.addEventListener('blur', (e) => {
-                    if (e.target.id === 'photo') {
-                        validateField('photo', e.target.files[0]);
-                    } else {
-                        validateField(e.target.id, e.target.value);
-                    }
-                });
+                form.removeEventListener('submit', showAlert);
+                form.addEventListener('submit', handleSubmit);
             });
-
-            form.removeEventListener('submit', showAlert);
-            form.addEventListener('submit', handleSubmit);
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </x-Supvis.SupvisLayouts>
