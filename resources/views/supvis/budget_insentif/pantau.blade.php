@@ -1,15 +1,10 @@
 <x-Supvis.SupvisLayouts>
-<link href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" rel="stylesheet">
+    <link href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" rel="stylesheet">
 
-    <style>
-        
-       
-
-    </style>
     <div class="container">
         <h2 class="text-center mt-5 mb-5"><b>Riwayat Perubahan Budget</b></h2>
 
-        <div class="row my-4">
+        {{-- <div class="row my-4">
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3">
                     <div class="card-header" style="color: black;">
@@ -39,11 +34,54 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+
+        <div class="row g-3 mb-3">
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <img src="https://placehold.co/100x70/2563eb/ffffff?text=Total+Budget" class="card-img-top"
+                        alt="">
+                    <div class="card-body text-center">
+                        <h2 class="text-primary mb-0">
+                            Rp. {{ number_format($totalBudget, 2) }}
+                            <a href="{{ route('supvis.budget_insentif.index') }}" class="btn btn-sm btn-light"><i class="fa-solid fa-pen-to-square"></i></a>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <img src="https://placehold.co/100x70/DA3D20/ffffff?text=Total+Insentif" class="card-img-top"
+                        alt="">
+                    <div class="card-body text-center">
+                        <h2 class="text-danger mb-0">
+                            Rp. {{ number_format($totalInsentif, 2) }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <img src="https://placehold.co/100x70/6CA651/ffffff?text=Sisa+Budget" class="card-img-top"
+                        alt="">
+                    <div class="card-body text-center">
+                        <h2 class="text-success mb-0">
+                            Rp. {{ number_format($sisaBudget, 2) }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+
         <table id="budget-table" class="table table-bordered">
-            <thead style="background-color: #23a0b0;" >
+            <thead style="background-color: #23a0b0;">
                 <tr class="text-center">
-                    <th >ID</th>
+                    <th>ID</th>
                     <th>Perubahan Budget</th>
                     <th>Budget Sebelum</th>
                     <th>Budget Sesudah</th>
