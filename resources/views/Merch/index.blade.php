@@ -7,7 +7,6 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
-    <h1>button 'detail' masih tidak bisa dipakai</h1>
     <div class="container mt-5">
         <h2 class="mb-4 text-center"><strong>Daftar Merchandise</strong></h2>
 
@@ -65,26 +64,22 @@
                                 <!-- Action -->
                                 <div class="mt-auto d-flex gap-2">
 
-                                    <button type="button" class="btn btn-outline-primary btn-sm flex-fill btn-detail"
-                                        data-id="{{ $merchandise->id }}">
-                                        Detail
-                                    </button>
-
                                     <a href="{{ route('merch.edit', $merchandise->id) }}"
-                                        class="btn btn-outline-warning btn-sm flex-fill">
+                                        class="btn btn-outline-warning btn-sm flex-fill text-center">
                                         Edit Stok
                                     </a>
 
                                     <form action="{{ route('merch.destroy', $merchandise->id) }}" method="POST"
-                                        class="delete-form">
+                                        class="delete-form flex-fill">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
                                             Hapus
                                         </button>
                                     </form>
 
                                 </div>
+
 
                             </div>
                         </div>
