@@ -200,19 +200,6 @@
         .filter-box input {
             min-height: 42px;
         }
-
-        .chart-bar {
-            height: 14px;
-            border-radius: 20px;
-            background: #e9ecef;
-            overflow: hidden;
-        }
-
-        .chart-fill {
-            border-radius: 20px;
-            background: linear-gradient(90deg, #0d6efd, #20c997);
-            transition: width .6s ease;
-        }
     </style>
 
     <body>
@@ -223,49 +210,6 @@
         @elseif(session('error'))
             <p style="color: red;">{{ session('error') }}</p>
         @endif
-
-        {{-- <form method="GET" class="search-container">
-            <div class="filter-box">
-                <input type="date" name="tanggal_transaksi" value="{{ request('tanggal_transaksi') }}">
-            </div>
-
-            @php
-                $user = auth()->user();
-                $isKasir = $user->hasRole('kasir'); // Assuming you use Spatie or similar
-            @endphp
-
-            <div class="filter-box">
-                <select name="id_supervisor" {{ $isKasir ? 'disabled' : '' }}>
-                    <option value="">Semua Kasir</option>
-                    @foreach ($transaksi->pluck('supervisor')->filter()->unique('id')->sortBy('name') as $supervisor)
-                        <option value="{{ $supervisor->id }}"
-                            {{ (request('id_supervisor') ?? ($isKasir ? $user->id : null)) == $supervisor->id ? 'selected' : '' }}>
-                            {{ $supervisor->name }}
-                        </option>
-                    @endforeach
-                </select>
-
-                @if ($isKasir)
-                    <input type="hidden" name="id_supervisor" value="{{ $user->id }}">
-                @endif
-            </div>
-
-            <div class="filter-box">
-                <select name="metode_pembayaran">
-                    <option value="">Semua Metode</option>
-                    @foreach ($transaksi->pluck('metode_pembayaran')->unique() as $metode)
-                        <option value="{{ $metode }}" {{ request('metode_pembayaran') == $metode ? 'selected' : '' }}>
-                            {{ $metode }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="filter-box">
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
-        </form> --}}
-
         <form method="GET" class="search-container">
             <div class="filter-box">
                 <input type="date" name="tanggal_transaksi" value="{{ request('tanggal_transaksi') }}"
@@ -387,97 +331,23 @@
             </div>
         </div>
 
-        {{-- DIAGRAM --}}
         <div class="container mt-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h5 class="fw-semibold mb-4 text-center">Distribusi Metode Pembayaran</h5>
+                    <h5 class="fw-semibold text-center mb-3">
+                        Metode Pembayaran
+                    </h5>
 
-                    @php
-                        $max = max($paymentSums ?: [1]);
-                    @endphp
-
-                    @foreach (['Mandiri', 'BNI', 'BCA', 'Tunai', 'Others'] as $method)
-                        @php
-                            $value = $paymentSums[$method] ?? 0;
-                            $percent = $max > 0 ? ($value / $max) * 100 : 0;
-                        @endphp
-
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1 small fw-semibold">
-                                <span>{{ $method }}</span>
-                                <span>Rp {{ number_format($value, 0, ',', '.') }}</span>
-                            </div>
-
-                            <div class="progress chart-bar">
-                                <div class="progress-bar chart-fill" style="width: {{ $percent }}%">
-                                </div>
-                            </div>
+                    <div class="d-flex justify-content-center">
+                        <div style="max-width:380px;">
+                            <canvas id="paymentPie"></canvas>
                         </div>
-                    @endforeach
-
+                    </div>
                 </div>
             </div>
         </div>
 
 
-
-        {{-- <div class="container mt-4">
-            <div class="table-responsive-scroll">
-                <table class="data-table" id="transactionTable">
-                    <thead>
-                        <tr>
-                            <th>ID Transaksi</th>
-                            <th>Kasir</th>
-                            <th>Tanggal Transaksi</th>
-                            <th>Nama Sales</th>
-                            <th>No. Tlp Sales</th>
-                            <th>Tempat Bertugas</th>
-                            <th>Bertugas</th>
-                            <th>Nama Pelanggan</th>
-                            <th>No. Tlp Pelanggan</th>
-                            <th>Nomor Injeksi</th>
-                            <th>Addon Perdana</th>
-                            <th>Aktivasi Tanggal</th>
-                            <th>Jenis Paket</th>
-                            <th>Merchandise</th>
-                            <th>Metode Pembayaran</th>
-                            <th>Harga</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($transaksi as $transaction)
-                            <tr>
-                                <td data-label="ID Transaksi">{{ $transaction->id_transaksi }}</td>
-                                <td data-label="Kasir">{{ $transaction->supervisor?->name }}</td>
-                                <td data-label="Tanggal Transaksi">{{ $transaction->tanggal_transaksi }}</td>
-                                <td data-label="Nama Sales">{{ $transaction->nama_sales }}</td>
-                                <td data-label="No. Tlp Sales">{{ $transaction->nomor_telepon }}</td>
-                                <td data-label="Tempat Bertugas">
-                                    {{ optional($transaction->sales)->tempat_tugas ?? '-' }}
-                                </td>
-                                <td data-label="Bertugas">
-                                    {{ optional($transaction->sales)->bertugas ? 'Ya' : 'Tidak' }}
-                                </td>
-                                <td data-label="Nama Pelanggan">{{ $transaction->nama_pelanggan }}</td>
-                                <td data-label="No. Tlp Pelanggan">{{ $transaction->telepon_pelanggan }}</td>
-                                <td data-label="Nomor Injeksi">{{ $transaction->nomor_injeksi }}</td>
-                                <td data-label="Addon Perdana"> {{ $transaction->addon_perdana ? '✓' : '✗' }} </td>
-                                <td data-label="Aktivasi Tanggal">{{ $transaction->aktivasi_tanggal }}</td>
-                                <td data-label="Jenis Paket">
-                                    {{ optional($transaction->produk)->produk_nama ?? 'Produk tidak ditemukan' }}
-                                </td>
-                                <td data-label="Merchandise">{{ $transaction->merchandise }}</td>
-                                <td data-label="Metode Pembayaran">{{ $transaction->metode_pembayaran }}</td>
-                                <td data-label="Harga Akhir">Rp
-                                    {{ number_format(optional($transaction->produk)->produk_harga_akhir ?? 0, 0, ',', '.') }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div> --}}
         <div class="container mx-auto mt-6 px-2">
             <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
 
@@ -591,7 +461,8 @@
                                     </td>
 
                                     <td class="px-4 py-3 text-right font-semibold text-gray-900 whitespace-nowrap">
-                                        Rp {{ number_format(optional($t->produk)->produk_harga_akhir ?? 0, 0, ',', '.') }}
+                                        Rp
+                                        {{ number_format(optional($t->produk)->produk_harga_akhir ?? 0, 0, ',', '.') }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -615,8 +486,44 @@
             <a href="{{ route('export.excel', $queryParams) }}" class="btn btn-success">Export ke Excel</a>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
         <script>
+            const paymentData = @json($paymentSums);
+
+            const labels = Object.keys(paymentData);
+            const values = Object.values(paymentData);
+
+            const total = values.reduce((a, b) => a + b, 0);
+
+            new Chart(document.getElementById('paymentPie'), {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(ctx) {
+                                    const value = ctx.raw || 0;
+                                    const percent = total ? ((value / total) * 100).toFixed(1) : 0;
+
+                                    return `${ctx.label}: Rp ${value.toLocaleString('id-ID')} (${percent}%)`;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
             $(document).ready(function() {
                 $('#transactionTable').DataTable({
                     paging: true,
