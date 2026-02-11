@@ -183,7 +183,7 @@
                                 <div class="d-flex gap-3 role-radio">
                                     <input type="radio" class="btn-check" name="role" id="role_sales"
                                         value="Sales" checked>
-                                    <label class="btn btn-outline-primary w-100" for="role_sales">
+                                    <label class="btn btn-outline-success w-100" for="role_sales">
                                         Sales
                                     </label>
 
