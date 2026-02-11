@@ -1,11 +1,5 @@
 <x-Supvis.SupvisLayouts>
     <main class="content">
-        @if (Auth::user()->is_superuser)
-            <li class="list-group-item">
-                <a href="a">Menu tambahan khusus Superuser (ini error / catatan akbar)</a>
-            </li>
-        @endif
-
         <div class="container" style="text-align: center; padding: 18px; font-family: 'Poppins', sans-serif;">
             <div class="welcome-card">
                 <div class="welcome-text">
